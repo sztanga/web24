@@ -32,3 +32,10 @@ PS. Stosuj znane Ci dobre praktyki wytwarzania oprogramowania oraz korzystaj z r
 - ```php artisan db:seed``` - seed the database with fake data
 - ```php artisan serve``` - start the local server
 
+
+
+
+When making calls with PostMan make sure to have following Pre-Request Script:
+```
+pm.request.headers.add({ key: 'X-Requested-With', value: 'XMLHttpRequest' });
+```
