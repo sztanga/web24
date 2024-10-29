@@ -32,10 +32,27 @@ PS. Stosuj znane Ci dobre praktyki wytwarzania oprogramowania oraz korzystaj z r
 - ```php artisan db:seed``` - seed the database with fake data
 - ```php artisan serve``` - start the local server
 
+## API
 
-
+### Remember
 
 When making calls with PostMan make sure to have following Pre-Request Script:
 ```
 pm.request.headers.add({ key: 'X-Requested-With', value: 'XMLHttpRequest' });
 ```
+
+## Authentication
+This API uses **Laravel Sanctum** for authentication.
+
+After successful login you will receive an access token, which must be included in the headers of all authenticated requests.
+
+```
+login: test@web24.com.pl
+password: password
+```
+
+Include the following header in authenticated requests:
+```
+Authorization: Bearer {token}
+```
+
