@@ -10,6 +10,29 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     tags={"Authentication"},
+     *     summary="User login",
+     *     description="Logs in a user and returns a token",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", example="test@web24.com.pl"),
+     *             @OA\Property(property="password", type="string", example="password")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV...")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Invalid credentials")
+     * )
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -27,6 +50,17 @@ class AuthenticatedSessionController extends Controller
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     tags={"Authentication"},
+     *     summary="User logout",
+     *     description="Logs out the authenticated user",
+     *     security={{"BearerAuth": {}}},
+     *     @OA\Response(response=200, description="Logged out successfully"),
+     *     @OA\Response(response=401, description="Unauthorized")
+     * )
+     */
     public function destroy(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

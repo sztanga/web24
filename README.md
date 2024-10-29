@@ -30,6 +30,7 @@ PS. Stosuj znane Ci dobre praktyki wytwarzania oprogramowania oraz korzystaj z r
 - ```touch database/database.sqlite``` - create sqlite database file
 - ```php artisan migrate``` - run database migrations
 - ```php artisan db:seed``` - seed the database with fake data
+- ```php artisan l5-swagger:generate``` - regenerate swagger api docs
 - ```php artisan serve``` - start the local server
 
 ## API
@@ -56,3 +57,6 @@ Include the following header in authenticated requests:
 Authorization: Bearer {token}
 ```
 
+## Endpoints
+
+Visit ```{url}/api/documentation/ ``` for detailed API documentation
