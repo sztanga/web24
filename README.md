@@ -60,3 +60,19 @@ Authorization: Bearer {token}
 ## Endpoints
 
 Visit ```{url}/api/documentation/ ``` for detailed API documentation
+
+## Unit Tests
+
+All endpoints are covered with unit tests. 
+
+Command to run the tests:
+```
+php artisan test
+```
+
+## Throttling
+
+Throttling is setup to prevent too many requests hitting the endpoints.
+
+- login endpoint allows 10 requests / minute
+- rest of the endpoints allow 60 requests / minute

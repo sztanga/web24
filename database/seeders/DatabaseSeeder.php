@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
         Company::factory(5)->create()->each(function ($company) {
             $company->employees()->saveMany(Employee::factory(10)->make());
         });
+
+        $this->call(
+            UserSeeder::class
+        );
     }
 }

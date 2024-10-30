@@ -29,7 +29,7 @@ class UpdateEmployeeRequest extends FormRequest
             'first_name' => 'sometimes|required|string|max:255',
             'last_name' => 'sometimes|required|string|max:255',
             'email' => "sometimes|required|string|email|max:255|unique:employees,email,{$employeeId}",
-            'phone' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|string|max:20',
             'company_id' => 'sometimes|required|exists:companies,id',
         ];
     }

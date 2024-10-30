@@ -16,9 +16,11 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 |
 */
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->name('login')
+    ->middleware('throttle:10,1');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::apiResource('companies', CompanyController::class);
     Route::apiResource('employees', EmployeeController::class);
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
