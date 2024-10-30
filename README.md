@@ -33,6 +33,8 @@ PS. Stosuj znane Ci dobre praktyki wytwarzania oprogramowania oraz korzystaj z r
 - ```php artisan l5-swagger:generate``` - regenerate swagger api docs
 - ```php artisan serve``` - start the local server
 
+Make sure that `user` table has a default user in it after seeding.
+
 ## API
 
 ### Remember
@@ -61,6 +63,10 @@ Authorization: Bearer {token}
 
 Visit ```{url}/api/documentation/ ``` for detailed API documentation
 
+## Postman collection
+
+Postman collection is located in the root folder of the repository [here](web24.postman_collection.json)
+
 ## Unit Tests
 
 All endpoints are covered with unit tests. 
@@ -76,3 +82,9 @@ Throttling is setup to prevent too many requests hitting the endpoints.
 
 - login endpoint allows 10 requests / minute
 - rest of the endpoints allow 60 requests / minute
+
+## Caching
+
+Caching is setup to improve the performance of the endpoints. 
+Cache keys and TTL settings are located as constrains 
+on top of each controller that uses caching.
