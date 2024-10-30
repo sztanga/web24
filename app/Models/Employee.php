@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @OA\Schema(
  *     schema="Employee",
- *     required={"first_name", "last_name", "email"},
+ *     required={"first_name", "last_name", "email", "company_id"},
  *     @OA\Property(
  *          property="id",
  *          type="integer", example=1

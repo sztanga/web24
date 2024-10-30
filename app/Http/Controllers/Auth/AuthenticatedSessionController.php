@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV...")
      *         )
      *     ),
-     *     @OA\Response(response=401, description="Invalid credentials")
+     *     @OA\Response(response=401, description="Invalid credentials", @OA\JsonContent())
      * )
      */
     public function store(Request $request)
@@ -57,8 +57,8 @@ class AuthenticatedSessionController extends Controller
      *     summary="User logout",
      *     description="Logs out the authenticated user",
      *     security={{"BearerAuth": {}}},
-     *     @OA\Response(response=200, description="Logged out successfully"),
-     *     @OA\Response(response=401, description="Unauthorized")
+     *     @OA\Response(response=200, description="Logged out successfully", @OA\JsonContent()),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent())
      * )
      */
     public function destroy(Request $request)

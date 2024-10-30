@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 
 class CompanyController extends Controller
 {
+    private const CACHE_TTL = 600;
+    private const CACHE_COMPANIES_LIST_KEY = 'companies_list';
+    private const CACHE_COMPANY_KEY_PREFIX = 'company_';
+
     /**
      * @OA\Get(
      *     path="/api/companies",
@@ -24,7 +29,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return Company::with('employees')->get();
+        return Cache::remember(self::CACHE_COMPANIES_LIST_KEY, self::CACHE_TTL, function () {
+            return Company::all();
+        });
     }
 
     /**
@@ -43,13 +50,16 @@ class CompanyController extends Controller
      *             @OA\Property(property="postal_code", type="string", example="12345")
      *         )
      *     ),
-     *     @OA\Response(response=201, description="Company created successfully"),
-     *     @OA\Response(response=400, description="Bad request")
+     *     @OA\Response(response=201, description="Company created successfully", @OA\JsonContent()),
+     *     @OA\Response(response=400, description="Bad request", @OA\JsonContent())
      * )
      */
     public function store(StoreCompanyRequest $request)
     {
         $company = Company::create($request->validated());
+
+        Cache::forget(self::CACHE_COMPANIES_LIST_KEY);
+
         return response()->json($company, Response::HTTP_CREATED);
     }
 
@@ -65,13 +75,17 @@ class CompanyController extends Controller
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(response=200, description="Company data"),
-     *     @OA\Response(response=404, description="Company not found")
+     *     @OA\Response(response=200, description="Company data", @OA\JsonContent()),
+     *     @OA\Response(response=404, description="Company not found", @OA\JsonContent())
      * )
      */
     public function show($id)
     {
-        return Company::with('employees')->findOrFail($id);
+        $cacheKey = self::CACHE_COMPANY_KEY_PREFIX . $id;
+
+        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($id) {
+            return Company::findOrFail($id);
+        });
     }
 
     /**
@@ -94,14 +108,18 @@ class CompanyController extends Controller
      *             @OA\Property(property="postal_code", type="string", example="54321")
      *         )
      *     ),
-     *     @OA\Response(response=200, description="Company updated successfully"),
-     *     @OA\Response(response=400, description="Bad request")
+     *     @OA\Response(response=200, description="Company updated successfully", @OA\JsonContent()),
+     *     @OA\Response(response=400, description="Bad request", @OA\JsonContent())
      * )
      */
     public function update(UpdateCompanyRequest $request, $id)
     {
         $company = Company::findOrFail($id);
         $company->update($request->validated());
+
+        Cache::forget(self::CACHE_COMPANY_KEY_PREFIX . $id);
+        Cache::forget(self::CACHE_COMPANIES_LIST_KEY);
+
         return response()->json($company);
     }
 
@@ -118,14 +136,18 @@ class CompanyController extends Controller
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(response=204, description="Company deleted successfully"),
-     *     @OA\Response(response=404, description="Company not found")
+     *     @OA\Response(response=204, description="Company deleted successfully", @OA\JsonContent()),
+     *     @OA\Response(response=404, description="Company not found", @OA\JsonContent())
      * )
      */
     public function destroy($id)
     {
         $company = Company::findOrFail($id);
         $company->delete();
+
+        Cache::forget(self::CACHE_COMPANY_KEY_PREFIX . $id);
+        Cache::forget(self::CACHE_COMPANIES_LIST_KEY);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

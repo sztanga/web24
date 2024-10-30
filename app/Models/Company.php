@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     schema="Company",
  *     type="object",
  *     description="Company Model",
+ *     required={"name", "NIP", "address", "city", "postal_code"},
  *     @OA\Property(
  *         property="id",
  *         type="integer",
